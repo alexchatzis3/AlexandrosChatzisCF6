@@ -1,0 +1,43 @@
+.dashboard-card {
+    max-width: 500px;
+    margin: 50px auto;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    border-radius: 10px;
+    text-align: center;
+}
+
+.button-group {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+}
+
+mat-toolbar {
+    margin-bottom: 20px;
+}
+
+.spacer {
+    flex: 1 1 auto;
+}
+
+button {
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    margin: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+button:hover {
+    background-color: #007BFF;
+    color: white;
+}
+
+button[disabled] {
+    background-color: gray;
+    cursor: not-allowed;
+}
+

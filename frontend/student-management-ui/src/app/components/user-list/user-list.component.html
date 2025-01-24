@@ -1,0 +1,193 @@
+<mat-toolbar color="primary">
+  <span>User Management UI</span>
+</mat-toolbar>
+
+<mat-card>
+  <h2>User List</h2>
+
+  <!-- Add New User Button -->
+  <button
+   mat-raised-button
+   color="accent"
+   *ngIf="role === 'ADMIN'"
+   (click)="showCreateForm = !showCreateForm"
+  >
+  {{ showCreateForm ? 'Hide Form' : 'Add New User' }}
+  </button>
+
+  <!-- Add New User Form -->
+  <mat-card *ngIf="showCreateForm">
+    <h3>Add New User</h3>
+    <form>
+      <!-- Username Field -->
+      <mat-form-field class="full-width" appearance="fill">
+        <mat-label>Username</mat-label>
+        <input
+          matInput
+          placeholder="Enter Username"
+          [(ngModel)]="newUser.username"
+          name="username"
+          required
+          minlength="3"
+          #usernameInput="ngModel"
+        />
+        <mat-error *ngIf="usernameInput.invalid && usernameInput.touched">
+          <span *ngIf="usernameInput.errors?.['required']">Username is required.</span>
+          <span *ngIf="usernameInput.errors?.['minlength']">Username must be at least 3 characters long.</span>
+        </mat-error>
+      </mat-form-field>
+  
+      <!-- Password Field -->
+      <mat-form-field class="full-width" appearance="fill">
+        <mat-label>Password</mat-label>
+        <input
+          matInput
+          type="password"
+          placeholder="Enter Password"
+          [(ngModel)]="newUser.password"
+          name="password"
+          required
+          minlength="6"
+          #passwordInput="ngModel"
+        />
+        <mat-error *ngIf="passwordInput.invalid && passwordInput.touched">
+          <span *ngIf="passwordInput.errors?.['required']">Password is required.</span>
+          <span *ngIf="passwordInput.errors?.['minlength']">Password must be at least 6 characters long.</span>
+        </mat-error>
+      </mat-form-field>
+  
+      <!-- Role Field -->
+      <!-- Role Field with Radio Buttons -->
+    <div class="role-container">
+      <label>Role:</label>
+      <mat-radio-group
+        [(ngModel)]="newUser.role"
+        name="role"
+        required
+        #roleInput="ngModel"
+      >
+      <mat-radio-button value="USER" [checked]="true">USER</mat-radio-button>
+      <mat-radio-button value="ADMIN">ADMIN</mat-radio-button>
+      </mat-radio-group>
+      <mat-error *ngIf="roleInput.invalid && roleInput.touched">
+        Role is required.
+      </mat-error>
+    </div>
+
+  
+      <!-- Buttons -->
+      <div class="button-group">
+        <button
+          mat-raised-button
+          color="primary"
+          (click)="createUser()"
+          [disabled]="usernameInput.invalid || passwordInput.invalid || roleInput.invalid"
+        >
+          Create User
+        </button>
+        <button mat-button color="warn" (click)="showCreateForm = false">
+          Cancel
+        </button>
+      </div>
+    </form>
+  </mat-card>
+  
+    
+  
+  <!-- Search Field -->
+  <mat-form-field>
+    <mat-label>Search Users</mat-label>
+    <input
+      matInput
+      (keyup)="applyFilter($event)"
+      placeholder="Enter search term"
+    />
+  </mat-form-field>
+
+  <!-- User Table -->
+  <mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+    <!-- Username Column -->
+    <ng-container matColumnDef="username">
+      <mat-header-cell *matHeaderCellDef> Username </mat-header-cell>
+      <mat-cell *matCellDef="let user"> {{ user.username }} </mat-cell>
+    </ng-container>
+
+    <!-- Role Column -->
+    <ng-container matColumnDef="role">
+      <mat-header-cell *matHeaderCellDef> Role </mat-header-cell>
+      <mat-cell *matCellDef="let user"> {{ user.role }} </mat-cell>
+    </ng-container>
+
+    <!-- Actions Column -->
+    <ng-container matColumnDef="actions">
+      <mat-header-cell *matHeaderCellDef> Actions </mat-header-cell>
+      <mat-cell *matCellDef="let user">
+        <button mat-icon-button (click)="editUser(user)">
+          <mat-icon>edit</mat-icon>
+        </button>
+        <button mat-icon-button color="warn" (click)="deleteUser(user.id)">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </mat-cell>
+    </ng-container>
+
+    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
+  </mat-table>
+
+  <!-- Paginator -->
+  <mat-paginator [pageSize]="5" [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+  <!-- Back to Dashboard Button -->
+  <button mat-raised-button color="warn" (click)="returnToDashboard()">Back to Dashboard</button>
+</mat-card>
+
+<!-- Edit User Form -->
+<mat-card *ngIf="showEditForm">
+  <h3>Edit User</h3>
+  <form>
+    <mat-form-field>
+      <mat-label>Username</mat-label>
+      <input
+        matInput
+        placeholder="New Username"
+        [(ngModel)]="userToEdit.username"
+        name="editUsername"
+        minlength="3"
+        required
+        #editUsernameInput="ngModel"
+      />
+      <mat-error *ngIf="editUsernameInput.invalid && editUsernameInput.touched">
+        Username must be at least 3 characters.
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>Password</mat-label>
+      <input
+        matInput
+        placeholder="New Password"
+        [(ngModel)]="userToEdit.password"
+        name="editPassword"
+        type="password"
+        minlength="6"
+        required
+        #editPasswordInput="ngModel"
+      />
+      <mat-error *ngIf="editPasswordInput.invalid && editPasswordInput.touched">
+        Password must be at least 6 characters.
+      </mat-error>
+    </mat-form-field>
+
+    <button
+      mat-raised-button
+      color="primary"
+      (click)="updateUser()"
+      [disabled]="editUsernameInput.invalid || editPasswordInput.invalid"
+    >
+      Update User
+    </button>
+    <button mat-button (click)="showEditForm = false">Cancel</button>
+  </form>
+</mat-card>
+
+

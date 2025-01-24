@@ -1,0 +1,59 @@
+<mat-toolbar color="primary">
+    <span>Login</span>
+  </mat-toolbar>
+  
+  <div class="container">
+    <mat-card class="login-card">
+      <mat-card-content>
+        <form (ngSubmit)="login()" #loginForm="ngForm">
+          <!-- Username Field -->
+          <mat-form-field appearance="outline">
+            <mat-label>Username</mat-label>
+            <input
+              matInput
+              type="text"
+              [(ngModel)]="username"
+              name="username"
+              required
+              #usernameField="ngModel"
+            />
+            <mat-error *ngIf="usernameField.errors?.['required'] && usernameField.touched">
+              Username is required
+            </mat-error>
+          </mat-form-field>
+  
+          <!-- Password Field -->
+          <mat-form-field appearance="outline">
+            <mat-label>Password</mat-label>
+            <input
+              matInput
+              type="password"
+              [(ngModel)]="password"
+              name="password"
+              required
+              #passwordField="ngModel"
+            />
+            <mat-error *ngIf="passwordField.errors?.['required'] && passwordField.touched">
+              Password is required
+            </mat-error>
+          </mat-form-field>
+  
+          <!-- Login Button -->
+          <button
+            mat-raised-button
+            color="primary"
+            type="submit"
+            [disabled]="loginForm.invalid"
+          >
+            Login
+          </button>
+        </form>
+      </mat-card-content>
+  
+      <!-- Back to Home Button -->
+      <mat-card-actions>
+        <button mat-button color="accent" (click)="goToHome()">Back to Home</button>
+      </mat-card-actions>
+    </mat-card>
+  </div>
+  

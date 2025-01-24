@@ -1,0 +1,14 @@
+<mat-toolbar color="primary">
+  <span>{{ title }}</span>
+  <span class="spacer"></span>
+
+  <div *ngIf="isHomePage()">
+      <button mat-raised-button color="accent" (click)="navigateToLogin()">Login</button>
+      <button mat-raised-button color="primary" (click)="navigateToRegister()">Create New User</button>
+  </div>
+</mat-toolbar>
+
+
+<main class="main-container">
+  <router-outlet></router-outlet>
+</main>

@@ -1,0 +1,28 @@
+mat-toolbar {
+    display: flex;
+    justify-content: space-between;
+    padding: 0 16px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.title {
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.spacer {
+    flex: 1 1 auto;
+}
+
+.home-card {
+    margin: 50px auto;
+    max-width: 600px;
+    text-align: center;
+    padding: 20px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+mat-card-title {
+    font-size: 28px;
+    font-weight: bold;
+}

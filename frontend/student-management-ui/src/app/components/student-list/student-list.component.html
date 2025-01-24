@@ -1,0 +1,222 @@
+<mat-toolbar color="primary">
+  <span>Student Management UI</span>
+</mat-toolbar>
+
+<mat-card>
+  <h2>Student List</h2>
+
+  <!-- Add New Student Button -->
+  <button
+    mat-raised-button
+    color="accent"
+    *ngIf="role === 'ADMIN'"
+    (click)="showCreateForm = !showCreateForm"
+  >
+    {{ showCreateForm ? 'Hide Form' : 'Add New Student' }}
+  </button>
+
+  <!-- Add New Student Form -->
+  <mat-card *ngIf="showCreateForm">
+    <h3>Add New Student</h3>
+    <form>
+      <!-- First Name Field -->
+      <mat-form-field class="full-width" appearance="fill">
+        <mat-label>First Name</mat-label>
+        <input
+          matInput
+          placeholder="Enter First Name"
+          [(ngModel)]="newStudent.firstname"
+          name="firstname"
+          required
+          minlength="2"
+          #firstnameInput="ngModel"
+        />
+        <mat-error *ngIf="firstnameInput.invalid && firstnameInput.touched">
+          <span *ngIf="firstnameInput.errors?.['required']">First Name is required.</span>
+          <span *ngIf="firstnameInput.errors?.['minlength']">First Name must be at least 2 characters long.</span>
+        </mat-error>
+      </mat-form-field>
+
+      <!-- Last Name Field -->
+      <mat-form-field class="full-width" appearance="fill">
+        <mat-label>Last Name</mat-label>
+        <input
+          matInput
+          placeholder="Enter Last Name"
+          [(ngModel)]="newStudent.lastname"
+          name="lastname"
+          required
+          minlength="2"
+          #lastnameInput="ngModel"
+        />
+        <mat-error *ngIf="lastnameInput.invalid && lastnameInput.touched">
+          <span *ngIf="lastnameInput.errors?.['required']">Last Name is required.</span>
+          <span *ngIf="lastnameInput.errors?.['minlength']">Last Name must be at least 2 characters long.</span>
+        </mat-error>
+      </mat-form-field>
+
+      <!-- Email Field -->
+      <mat-form-field class="full-width" appearance="fill">
+        <mat-label>Email</mat-label>
+        <input
+          matInput
+          placeholder="Enter Email"
+          [(ngModel)]="newStudent.email"
+          name="email"
+          required
+          pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
+          #emailInput="ngModel"
+        />
+        <mat-error *ngIf="emailInput.invalid && emailInput.touched">
+          <span *ngIf="emailInput.errors?.['required']">Email is required.</span>
+          <span *ngIf="emailInput.errors?.['pattern']">Please enter a valid email address.</span>
+        </mat-error>
+      </mat-form-field>
+
+      <!-- Buttons -->
+      <div class="button-group">
+        <button
+          mat-raised-button
+          color="primary"
+          (click)="createStudent()"
+          [disabled]="firstnameInput.invalid || lastnameInput.invalid || emailInput.invalid"
+        >
+          Create Student
+        </button>
+        <button mat-button color="warn" (click)="showCreateForm = false">
+          Cancel
+        </button>
+      </div>
+    </form>
+  </mat-card>
+
+
+  <!-- Search Field -->
+  <mat-form-field>
+    <mat-label>Search Students</mat-label>
+    <input
+      matInput
+      (keyup)="applyFilter($event)"
+      placeholder="Enter search term"
+    />
+  </mat-form-field>
+
+  <!-- Student Table -->
+  <mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+    <ng-container matColumnDef="firstname">
+      <mat-header-cell *matHeaderCellDef> First Name </mat-header-cell>
+      <mat-cell *matCellDef="let student"> {{ student.firstname }} </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="lastname">
+      <mat-header-cell *matHeaderCellDef> Last Name </mat-header-cell>
+      <mat-cell *matCellDef="let student"> {{ student.lastname }} </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="email">
+      <mat-header-cell *matHeaderCellDef> Email </mat-header-cell>
+      <mat-cell *matCellDef="let student"> {{ student.email }} </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="actions">
+      <mat-header-cell *matHeaderCellDef> Actions </mat-header-cell>
+      <mat-cell *matCellDef="let student">
+        <button mat-icon-button (click)="editStudent(student)">
+          <mat-icon>edit</mat-icon>
+        </button>
+        <button mat-icon-button color="warn" (click)="deleteStudent(student.id)">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </mat-cell>
+    </ng-container>
+
+    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
+  </mat-table>
+
+  <!-- Paginator -->
+  <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+
+  <!-- Edit Student Form -->
+<mat-card *ngIf="showEditForm">
+  <h3>Edit Student</h3>
+  <form>
+    <!-- First Name Field -->
+    <mat-form-field class="full-width" appearance="fill">
+      <mat-label>First Name</mat-label>
+      <input
+        matInput
+        placeholder="Enter First Name"
+        [(ngModel)]="studentToEdit.firstname"
+        name="editFirstname"
+        required
+        minlength="2"
+        #editFirstnameInput="ngModel"
+      />
+      <mat-error *ngIf="editFirstnameInput.invalid && editFirstnameInput.touched">
+        <span *ngIf="editFirstnameInput.errors?.['required']">First Name is required.</span>
+        <span *ngIf="editFirstnameInput.errors?.['minlength']">First Name must be at least 2 characters long.</span>
+      </mat-error>
+    </mat-form-field>
+
+    <!-- Last Name Field -->
+    <mat-form-field class="full-width" appearance="fill">
+      <mat-label>Last Name</mat-label>
+      <input
+        matInput
+        placeholder="Enter Last Name"
+        [(ngModel)]="studentToEdit.lastname"
+        name="editLastname"
+        required
+        minlength="2"
+        #editLastnameInput="ngModel"
+      />
+      <mat-error *ngIf="editLastnameInput.invalid && editLastnameInput.touched">
+        <span *ngIf="editLastnameInput.errors?.['required']">Last Name is required.</span>
+        <span *ngIf="editLastnameInput.errors?.['minlength']">Last Name must be at least 2 characters long.</span>
+      </mat-error>
+    </mat-form-field>
+
+    <!-- Email Field -->
+    <mat-form-field class="full-width" appearance="fill">
+      <mat-label>Email</mat-label>
+      <input
+        matInput
+        placeholder="Enter Email"
+        [(ngModel)]="studentToEdit.email"
+        name="editEmail"
+        required
+        type="email"
+        pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
+        #editEmailInput="ngModel"
+      />
+      <mat-error *ngIf="editEmailInput.invalid && editEmailInput.touched">
+        <span *ngIf="editEmailInput.errors?.['required']">Email is required.</span>
+        <span *ngIf="editEmailInput.errors?.['pattern']">Please enter a valid email address.</span>
+      </mat-error>
+    </mat-form-field>
+
+    <!-- Buttons -->
+    <div class="button-group">
+      <button
+        mat-raised-button
+        color="primary"
+        (click)="updateStudent()"
+        [disabled]="editFirstnameInput.invalid || editLastnameInput.invalid || editEmailInput.invalid"
+      >
+        Update Student
+      </button>
+      <button mat-button color="warn" (click)="showEditForm = false">
+        Cancel
+      </button>
+    </div>
+  </form>
+</mat-card>
+
+  <!-- Back to Dashboard Button -->
+  <button mat-raised-button color="warn" (click)="returnToDashboard()">
+    Back to Dashboard
+  </button>
+</mat-card>
+
+

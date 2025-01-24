@@ -1,0 +1,44 @@
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: calc(100vh - 64px); 
+  }
+  
+  mat-card.login-card {
+    min-width: 400px;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+  }
+  
+  mat-card-content {
+    display: flex;
+    flex-direction: column; 
+    gap: 20px; 
+  }
+  
+  button[type="submit"] {
+    width: 100%;
+    margin-top: 10px;
+  }
+
+  
+  
+  mat-card-actions {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 10px;
+  }
+  
+  mat-toolbar {
+    margin-bottom: 20px;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+  }
+  
+  mat-error {
+    color: red;
+    font-size: 0.875em;
+    margin-top: 4px;
+  }
+  

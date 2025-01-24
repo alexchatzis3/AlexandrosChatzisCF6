@@ -1,0 +1,72 @@
+/* Styles for the card */
+mat-card {
+    max-width: 400px;
+    margin: auto;
+    padding: 20px;
+}
+
+/* Toolbar styles */
+mat-toolbar {
+    margin-bottom: 20px;
+}
+
+/* Button styles */
+button {
+    margin-top: 10px;
+}
+
+button:hover {
+    background-color: #007BFF;
+    color: white;
+}
+
+button[disabled] {
+    background-color: gray;
+}
+
+/* General layout and alignment */
+.container {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.card {
+    width: 400px;
+    padding: 20px;
+}
+
+/* Title styling */
+.title {
+    text-align: center;
+}
+
+/* Form field styling */
+.form-field {
+    width: 100%;
+    margin-bottom: 15px;
+}
+
+/* Role selection styling */
+.role-label {
+    margin-bottom: 10px;
+    display: block;
+}
+
+.radio-button {
+    display: block;
+    margin-bottom: 5px;
+}
+
+/* Error message styling */
+.error {
+    color: red;
+    margin-bottom: 15px;
+}
+
+/* Button group alignment */
+.button-group {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+}

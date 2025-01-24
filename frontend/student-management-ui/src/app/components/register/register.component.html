@@ -1,0 +1,79 @@
+<mat-toolbar color="primary">
+  <span>Register New User</span>
+</mat-toolbar>
+
+<div class="container">
+  <mat-card class="card">
+    <h2 class="title">Register</h2>
+
+    <!-- Username Field -->
+    <mat-form-field appearance="outline" class="form-field">
+      <mat-label>Username</mat-label>
+      <input
+        matInput
+        placeholder="Enter username"
+        [(ngModel)]="newUser.username"
+        name="username"
+        required
+        minlength="3"
+        #usernameInput="ngModel"
+      />
+      <mat-error *ngIf="usernameInput.invalid && usernameInput.touched">
+        <span *ngIf="usernameInput.errors?.['required']">Username is required.</span>
+        <span *ngIf="usernameInput.errors?.['minlength']">
+          Username must be at least 3 characters long.
+        </span>
+      </mat-error>
+    </mat-form-field>
+
+    <!-- Password Field -->
+    <mat-form-field appearance="outline" class="form-field">
+      <mat-label>Password</mat-label>
+      <input
+        matInput
+        type="password"
+        placeholder="Enter password"
+        [(ngModel)]="newUser.password"
+        name="password"
+        required
+        minlength="6"
+        #passwordInput="ngModel"
+      />
+      <mat-error *ngIf="passwordInput.invalid && passwordInput.touched">
+        <span *ngIf="passwordInput.errors?.['required']">Password is required.</span>
+        <span *ngIf="passwordInput.errors?.['minlength']">
+          Password must be at least 6 characters long.
+        </span>
+      </mat-error>
+    </mat-form-field>
+
+    <!-- Role Selection -->
+    <mat-label class="role-label">Role</mat-label>
+    <mat-radio-group [(ngModel)]="newUser.role" name="role" required>
+      <mat-radio-button value="USER" class="radio-button">USER</mat-radio-button>
+      <mat-radio-button value="ADMIN" class="radio-button">ADMIN</mat-radio-button>
+    </mat-radio-group>
+    <mat-error *ngIf="!newUser.role" class="error">
+      Please select a role.
+    </mat-error>
+
+    <!-- Register and Back Buttons -->
+    <div class="button-group">
+      <button
+        mat-raised-button
+        color="primary"
+        (click)="createUser()"
+        [disabled]="usernameInput.invalid || passwordInput.invalid || !newUser.role"
+      >
+        Register
+      </button>
+      <button 
+        mat-button 
+        color="warn" 
+        (click)="goToHome()"
+        >
+        Back to Home
+      </button>
+    </div>
+  </mat-card>
+</div>
